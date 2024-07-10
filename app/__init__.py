@@ -1,5 +1,17 @@
-from flask import Blueprint
+from flask import Flask
+from .db import db
 
-bp = Blueprint('bp', __name__)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object('config')
 
-from .routers import home
+    db.init_app(app)
+
+    from .routers import home
+    app.register_blueprint(home.bp)
+
+    from .apis import home_api
+    app.register_blueprint(home_api.bp, url_prefix='/api')
+
+    return app
+

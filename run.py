@@ -1,8 +1,9 @@
-from app import bp
-from flask import Flask
+from app import create_app, db
 
-app = Flask(__name__)
-app.register_blueprint(bp)
+app = create_app()
+
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True)
