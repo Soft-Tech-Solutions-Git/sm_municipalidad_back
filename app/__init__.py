@@ -1,17 +1,26 @@
 from flask import Flask
-from .db import db
+from config import Config
+from .db.db import db
+
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('config')
+    app.config.from_object(Config)
 
     db.init_app(app)
 
-    from .routers import home
-    app.register_blueprint(home.bp)
+    with app.app_context():
+        from .models import SliderImage, Subtitle, StoryImage
 
-    from .apis import home_api
-    app.register_blueprint(home_api.bp, url_prefix='/api')
+        db.create_all()
+
+        # Registrar blueprints
+        from .routers.home import home_bp
+
+        app.register_blueprint(home_bp, url_prefix="/home")
+
+        from .routers.reu_def import main_bp
+
+        app.register_blueprint(main_bp)
 
     return app
-

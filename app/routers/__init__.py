@@ -1,10 +1,10 @@
-# app/routers/__init__.py
+# # app/routers/__init__.py
 
-from flask import Blueprint
+# from flask import Blueprint
 
-bp = Blueprint('home', __name__)
+# bp = Blueprint('home', __name__)
 
-# Importar el módulo de rutas para registrar sus rutas en el blueprint
-from . import home
+# # Importar el módulo de rutas para registrar sus rutas en el blueprint
+# from . import home
 
-# Ahora `bp` contendrá todas las rutas definidas en `home.py`
+# # Ahora `bp` contendrá todas las rutas definidas en `home.py`
