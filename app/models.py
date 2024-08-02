@@ -5,7 +5,7 @@ from .db.db import db
 class SliderImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String(255), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
     display = db.Column(db.String(255), nullable=False)
 
@@ -13,14 +13,15 @@ class SliderImage(db.Model):
 class Subtitle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(255), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
 
 
 class StoryImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String(255), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
     fecha_hora_baja = db.Column(db.DateTime)
 
 

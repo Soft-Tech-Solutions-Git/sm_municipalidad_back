@@ -2,7 +2,7 @@ from flask import current_app
 from sqlalchemy import text
 
 from app.functions import convert_image_to_base64, save_and_compress_image
-from ..models import SliderImage, Subtitle
+from ..models import SliderImage, Subtitle, StoryImage
 from ..db.db import db
 
 
@@ -17,7 +17,7 @@ def add_slider_image(author_id, files, display):
             if image_path:
                 img_n = {
                     "image_url": image_path,
-                    "user_id": author_id,
+                    "author_id": author_id,
                     "display": display,
                 }
                 new_slider_img = SliderImage(**img_n)
@@ -46,27 +46,9 @@ def get_slider_image(display):
     return slider
 
 
-# def update_slider_image(image_id, image_url):
-#     image = SliderImage.query.get(image_id)
-#     if not image:
-#         return None
-#     image.image_url = image_url
-#     db.session.commit()
-#     return image
-
-
-# def delete_slider_image(image_id):
-#     image = SliderImage.query.get(image_id)
-#     if not image:
-#         return None
-#     db.session.delete(image)
-#     db.session.commit()
-#     return image
-
-
 # SUBTITLE
 def add_subtitle(author_id, text):
-    subtitle = {"text": text, "user_id": author_id}
+    subtitle = {"text": text, "author_id": author_id}
     new_subtitle = Subtitle(**subtitle)
     db.session.add(new_subtitle)
     db.session.commit()
@@ -80,3 +62,28 @@ def get_subtitle():
 
 
 # HISTORIA
+def add_story(file, author_id, fecha_hora_baja):
+    upload_folder = current_app.config["UPLOAD_FOLDER"]
+    path = save_and_compress_image(file, upload_folder)
+    story = {
+        "author_id": author_id,
+        "fecha_hora_baja": fecha_hora_baja,
+        "image_url": path,
+    }
+    newStory = StoryImage(**story)
+    db.session.add(newStory)
+    db.session.commit()
+
+
+def get_story():
+    procedure_call = text("CALL GetStory")
+    result = db.session.execute(procedure_call).mappings().all()
+
+    if not result:
+        return None
+
+    story_list = []
+    for story_item in result:
+        story_data = {"id": story_item["id"], "image_url": story_item["image_url"]}
+        story_list.append(story_data)
+    return story_list
